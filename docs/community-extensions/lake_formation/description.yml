@@ -1,0 +1,43 @@
+extension:
+  name: lake_formation
+  description: AWS Lake Formation data-filter enforcement for Glue Iceberg catalogs
+  version: 0.1.0
+  language: C++
+  build: cmake
+  license: Apache-2.0
+  excluded_platforms: "wasm_mvp;wasm_eh;wasm_threads;windows_amd64_mingw"
+  maintainers:
+    - REPLACE_WITH_GITHUB_HANDLE
+
+repo:
+  github: REPLACE_WITH_ORG/duckdb-lake-formation
+  ref: REPLACE_WITH_RELEASE_COMMIT
+
+docs:
+  hello_world: |
+    -- Lake Formation enforces row-level data filters on Glue Iceberg catalogs.
+    -- ATTACH a Glue catalog in lake_formation access-delegation mode; the extension
+    -- discovers the caller's LF data-filter grant and vends scoped S3 credentials.
+    LOAD lake_formation;
+    ATTACH '123456789012' AS lf (
+        TYPE iceberg,
+        ENDPOINT_TYPE 'GLUE',
+        ACCESS_DELEGATION_MODE 'lake_formation',
+        LF_SESSION_TAG 'my-app'
+    );
+    SELECT count(*) FROM lf.my_db.my_table;
+  extended_description: |
+    The `lake_formation` extension enforces AWS Lake Formation row-level data filters when
+    reading Glue-managed Apache Iceberg tables. On `ATTACH ... (ACCESS_DELEGATION_MODE
+    'lake_formation')` it registers an access-delegation provider with the `iceberg`
+    extension. For each scanned table it:
+
+    - discovers the caller's effective data-filter policy via Glue `GetUnfilteredTableMetadata`,
+    - vends scoped, short-lived S3 credentials via Lake Formation `GetTemporaryGlue*Credentials`,
+    - installs the LF row filter as a mandatory scan filter that user predicates cannot widen.
+
+    All AWS SDK usage (Glue, Lake Formation, STS) is contained in this extension; the `iceberg`
+    extension carries no Lake Formation or AWS-data-filter code. Requires the `iceberg` extension;
+    `httpfs` and `aws` are used for S3 access and the base AWS credential chain. Only row-level
+    filters are supported in v1 (column-level and cell-level grants are rejected). Not available
+    on WebAssembly builds.

@@ -1,0 +1,30 @@
+{
+	"dependencies": [
+		"vcpkg-cmake",
+		"openssl",
+		{
+			"name": "aws-sdk-cpp",
+			"features": [
+				"sso",
+				"sts",
+				"identity-management",
+				"glue",
+				"lakeformation"
+			]
+		}
+	],
+	"vcpkg-configuration": {
+		"overlay-ports": []
+	},
+	"builtin-baseline": "84bab45d415d22042bd0b9081aea57f362da3f35",
+	"overrides": [
+		{
+			"name": "openssl",
+			"version": "3.6.0"
+		},
+		{
+			"name": "aws-c-http",
+			"version": "0.10.2"
+		}
+	]
+}
