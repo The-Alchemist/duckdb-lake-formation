@@ -69,7 +69,7 @@ SELECT count(*) FROM lf.my_db.my_table;
 This extension compiles against the `duckdb-iceberg` public headers but does not link the iceberg binary — `iceberg` is loaded as its own extension at runtime (`DONT_LINK`). The AWS SDK (Glue, Lake Formation, STS) is pulled in through `vcpkg.json` and is the only place in the stack that needs those components.
 
 ```bash
-git clone --recurse-submodules https://github.com/REPLACE_WITH_ORG/duckdb-lake-formation
+git clone --recurse-submodules https://github.com/The-Alchemist/duckdb-lake-formation
 cd duckdb-lake-formation
 make
 ```

@@ -12,7 +12,7 @@ duckdb_extension_load(lake_formation
 # TODO: pin GIT_TAG to the duckdb-iceberg commit that merges the access-delegation hooks. Until then,
 # point ICEBERG_SRC_DIR (see CMakeLists.txt) at a local checkout containing the hooks.
 duckdb_extension_load(iceberg
-    GIT_URL https://github.com/duckdb/duckdb-iceberg
+    GIT_URL https://github.com/The-Alchemist/duckdb-iceberg
     GIT_TAG REPLACE_WITH_PINNED_HOOK_COMMIT
     DONT_LINK
 )
